@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mental Health Prevalence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <div class="page-bg"></div>
+  <main class="app-shell">
+    <header class="hero">
+      <h1>Mental Health Prevalence</h1>
+      <p>Dashboard, prediction, time-series analysis, and report export</p>
+    </header>
+
+    <section class="controls">
+      <div class="control">
+        <label for="countrySelect">Country</label>
+        <select id="countrySelect"></select>
+      </div>
+      <div class="control">
+        <label for="metricSelect">Metric</label>
+        <select id="metricSelect"></select>
+      </div>
+      <div class="control">
+        <label for="yearMin">Year start</label>
+        <input id="yearMin" type="number" />
+      </div>
+      <div class="control">
+        <label for="yearMax">Year end</label>
+        <input id="yearMax" type="number" />
+      </div>
+      <button id="applyFilters" class="btn primary">Apply Filters</button>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="prediction">Prediction</button>
+      <button class="tab-btn" data-tab="timeseries">Time Series</button>
+      <button class="tab-btn" data-tab="insights">Insights Hub</button>
+      <button class="tab-btn" data-tab="exports">Exports</button>
+    </nav>
+
+    <section id="dashboard" class="tab-panel active">
+      <div class="metrics-grid">
+        <article class="metric-card"><h3>Latest Year</h3><p id="latestYear">-</p></article>
+        <article class="metric-card"><h3>Metric (%)</h3><p id="latestMetric">-</p></article>
+        <article class="metric-card"><h3>Total Burden (%)</h3><p id="latestTotal">-</p></article>
+      </div>
+      <div class="card"><div id="mainTrend"></div></div>
+      <div class="split">
+        <div class="card"><div id="allDisorders"></div></div>
+        <div class="card"><div id="composition"></div></div>
+      </div>
+      <div class="card"><div id="heatmap"></div></div>
+      <div class="card table-card">
+        <h3>Cleaned Data Preview</h3>
+        <div class="table-wrap"><table id="previewTable"></table></div>
+      </div>
+    </section>
+
+    <section id="prediction" class="tab-panel">
+      <div class="inline-controls">
+        <label for="lrHorizon">Prediction horizon (years)</label>
+        <input id="lrHorizon" type="range" min="1" max="20" value="5" />
+        <span id="lrValue">5</span>
+      </div>
+      <div class="card"><div id="predictionChart"></div></div>
+      <div class="card table-card">
+        <h3>Predicted Values</h3>
+        <div class="table-wrap"><table id="predictionTable"></table></div>
+      </div>
+    </section>
+
+    <section id="timeseries" class="tab-panel">
+      <div class="inline-controls">
+        <label for="tsHorizon">Forecast horizon (years)</label>
+        <input id="tsHorizon" type="range" min="1" max="20" value="5" />
+        <span id="tsValue">5</span>
+      </div>
+      <div class="card"><div id="timeSeriesChart"></div></div>
+      <div class="card table-card">
+        <h3>Year-over-year Change (%)</h3>
+        <div class="table-wrap"><table id="yoyTable"></table></div>
+      </div>
+    </section>
+
+    <section id="insights" class="tab-panel">
+      <div class="card">
+        <h3>News</h3>
+        <ul id="newsList"></ul>
+      </div>
+      <div class="card">
+        <h3>Awareness</h3>
+        <ul id="awarenessList"></ul>
+      </div>
+      <div class="card">
+        <h3>Food for Thought</h3>
+        <p id="thoughtText"></p>
+        <button id="newThought" class="btn">New Thought</button>
+      </div>
+    </section>
+
+    <section id="exports" class="tab-panel">
+      <div class="card">
+        <h3>Export Reports</h3>
+        <div class="export-grid">
+          <button id="downloadCsv" class="btn">Download CSV</button>
+          <button id="downloadExcel" class="btn">Download Excel</button>
+          <button id="downloadPdf" class="btn">Download PDF</button>
+          <button id="downloadJpeg" class="btn">Download image.jpeg</button>
+        </div>
+      </div>
+    </section>
+
+    <p id="status" class="status">Loading data...</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
